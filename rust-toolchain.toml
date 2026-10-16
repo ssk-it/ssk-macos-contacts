@@ -1,0 +1,4 @@
+# The Rust every machine builds with. The same version as Skourier and ssk-mail-core, so that one clippy judges the three.
+[toolchain]
+channel = "1.99.0"
+components = ["clippy", "rustfmt"]

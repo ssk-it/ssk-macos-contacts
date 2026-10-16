@@ -1,0 +1,31 @@
+version: 2
+
+updates:
+  # Weekly: more often would drown the pull requests that matter, less often would let a fix wait.
+  # objc2, block2, objc2-foundation and objc2-contacts are released together and require each other's versions: they move in one group, or the resolution fails (checked against objc2 0.6.5 and its frameworks 0.3.2, October 2026).
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      objc2:
+        patterns:
+          - 'objc2*'
+          - 'block2'
+      minor-and-patch:
+        patterns:
+          - '*'
+        update-types:
+          - minor
+          - patch
+
+  # Unpinned actions are an attack surface people forget. Once a month is enough: they move little.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns:
+          - '*'

@@ -1,0 +1,36 @@
+# Dependency policy, enforced in CI by `cargo deny check` (docs/invariants.md).
+
+[graph]
+all-features = true
+exclude-dev = true
+
+[licenses]
+# An allow-list: a licence missing here is refused. Skourier builds this crate in; nothing stronger than the MPL's file-level copyleft may enter (INV-4).
+allow = [
+  # This crate's own licence (LICENSE).
+  "MPL-2.0",
+  # Permissive: objc2, block2, objc2-foundation, objc2-contacts, bitflags.
+  "MIT",
+]
+confidence-threshold = 0.9
+unused-allowed-license = "deny"
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# INV-2: nothing here reaches the network, nor keeps anything.
+deny = [
+  { name = "reqwest" },
+  { name = "hyper" },
+  { name = "ureq" },
+  { name = "tokio" },
+  { name = "rusqlite" },
+  { name = "keyring" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+
+[advisories]
+yanked = "deny"

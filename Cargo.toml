@@ -1,0 +1,25 @@
+[package]
+name = "ssk-macos-contacts"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+repository = "https://github.com/ssk-it/ssk-macos-contacts"
+description = "A safe API over macOS Contacts: the access, and the contacts that have an email address."
+publish = false
+
+[lints.rust]
+# INV-1: the unsafe calls live in `src/macos.rs` alone, which allows them; anywhere else they fail the build.
+unsafe_code = "deny"
+
+[lints.clippy]
+# INV-1: every unsafe block says why it is sound.
+undocumented_unsafe_blocks = "warn"
+# Both off by default; their thresholds live in clippy.toml.
+cognitive_complexity = "warn"
+excessive_nesting = "warn"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+block2 = "0.6"
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSArray", "NSError", "NSString", "NSObject"] }
+objc2-contacts = { version = "0.3", default-features = false, features = ["std", "block2", "CNContact", "CNContactFetchRequest", "CNContactStore", "CNFetchRequest", "CNLabeledValue"] }
