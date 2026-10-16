@@ -1,0 +1,51 @@
+name: Checks
+
+# The checks judge, they do not fix: no `--fix`, no in-place formatting.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A result on an outdated commit teaches nothing: cancel what is stale.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    name: Rust — format, clippy, tests
+    # GitHub-hosted, not the organisation's self-hosted runners: this repository is public, and those runners execute whatever a pull request contains (docs/development.md, "CI").
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+
+      # The version comes from `rust-toolchain.toml`, which rustup installs on first use.
+      - name: Check the toolchain
+        run: |
+          cargo --version
+          cargo clippy --version
+
+      # Fast steps first, so that a failure arrives early.
+      - name: Format
+        run: cargo fmt --all --check
+
+      # `-D warnings`: a warning fails the check — clippy.toml's thresholds, and an unsafe block without its reason (INV-1).
+      - name: Lint
+        run: cargo clippy --all-targets --locked -- -D warnings
+
+      - name: Tests
+        run: cargo test --locked
+
+  dependencies:
+    name: Dependencies — licences, bans, sources, advisories
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check
+          arguments: --locked
