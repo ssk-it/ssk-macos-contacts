@@ -16,7 +16,7 @@ A test needs no contact of the user's, and no permission: what depends on them â
 
 ## Dependencies
 
-The `objc2` family only, released together and grouped by Dependabot. A new dependency is a review point: it must not reach the network or keep anything (INV-2), and its licence must be in `deny.toml` (INV-4).
+The `objc2` family only, released together and grouped by Dependabot. A new dependency is a review point: it must not reach the network or keep anything (INV-2), and its licence must be in `deny.toml` (INV-4). The advisories are checked again every Monday (`advisories.yml`): their database changes without `Cargo.lock` moving. What to do with a red check is in [development.md](development.md#when-the-dependency-check-is-red).
 
 ## Releases
 

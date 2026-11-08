@@ -1,0 +1,30 @@
+name: Advisories
+
+# The advisory database changes every day, Cargo.lock does not: a new RustSec advisory against a crate already locked turns nothing red until the next pull request, and a quiet week could hide one. This run checks every Monday on main — see docs/development.md, "When the dependency check is red".
+# Advisories only: licences, bans and sources depend on Cargo.lock and deny.toml alone, which the `dependencies` job of checks.yml judges on every change.
+# GitHub disables a scheduled workflow of a public repository after sixty days without a commit: the Actions tab then shows a button to enable it again, and `workflow_dispatch` lets it run by hand meanwhile.
+
+on:
+  schedule:
+    # Mondays, 06:00 UTC: a red run waits at the start of the week rather than over a weekend.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  advisories:
+    name: Rust — advisories
+    # GitHub-hosted, like the `dependencies` job of checks.yml: this repository is public, and the organisation's self-hosted runners execute whatever a pull request contains (docs/development.md, "CI"). The action installs cargo-deny itself.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check advisories
+          arguments: --locked

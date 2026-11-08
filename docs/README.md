@@ -4,7 +4,7 @@ Read in this order when you arrive:
 
 1. [`invariants.md`](invariants.md) — INV-1…INV-4, what the crate never does, and what checks each rule.
 2. [`practices.md`](practices.md) — what goes where, how it is tested, how errors are shaped, how a version ships.
-3. [`development.md`](development.md) — the tree, the commands, the CI and its traps.
+3. [`development.md`](development.md) — the tree, the commands, the CI, what to do with a red dependency check, and the tooling traps.
 4. [`clean-code.md`](clean-code.md) — the inside of a function, and the thresholds the linter enforces.
 5. [`conventions.md`](conventions.md) — language, naming, comments, commits, Markdown.
 
